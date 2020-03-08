@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, OnChanges, DoCheck, AfterContentChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
@@ -8,15 +8,24 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./home.component.css']
 })
 @Injectable()
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit,  DoCheck {
+  
+  // ngAfterContentChecked(): void {
+  //   console.log(this.auth,'after')
+  // }
 
-  isLoggedIn:false;
+  isLoggedIn=false;
 
   constructor(private route:Router, private auth:AuthService) { }
 
   ngOnInit() {
-    
+    //console.log(this.auth,"Init")
   }
+
+  ngDoCheck(): void {
+    this.isLoggedIn=this.auth.loggedIn;
+  }
+ 
 
   onLoadServers(){
     this.route.navigate(['/servers'], {queryParams:{allowEdit:'1'}, fragment:'loading'})
